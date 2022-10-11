@@ -54,4 +54,12 @@ public class MobileController
         mobileService.save(mobile);
         return "redirect:/";
     }
+
+    @GetMapping("/deleteMobile/{id}")
+    public String delete (@PathVariable Long id)
+    {
+        mobileService.delete(id);
+
+        return "redirect:/";
+    }
 }

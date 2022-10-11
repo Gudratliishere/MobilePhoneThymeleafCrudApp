@@ -33,4 +33,10 @@ public class MobileServiceImpl implements MobileService
         mobile.setCreatedAt(new Date());
         return mobileRepository.save(mobile);
     }
+
+    @Override
+    public void delete (Long id)
+    {
+        mobileRepository.deleteById(id);
+    }
 }

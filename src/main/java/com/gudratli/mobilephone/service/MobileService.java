@@ -11,4 +11,6 @@ public interface MobileService
     Mobile getById (Long id);
 
     Mobile save (Mobile mobile);
+
+    void delete (Long id);
 }
