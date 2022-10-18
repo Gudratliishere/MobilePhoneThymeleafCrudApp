@@ -15,5 +15,5 @@ public interface MobileService
 
     void delete (Long id);
 
-    Page<Mobile> getWithPagination (int pageNo, int pageSize);
+    Page<Mobile> getWithPagination (int pageNo, int pageSize, String sortField, String sortDirection);
 }

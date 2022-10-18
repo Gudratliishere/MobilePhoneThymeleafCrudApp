@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class MobileController
     @GetMapping({"/", "index"})
     public String index (Model model)
     {
-        return getByPaginated(1, model);
+        return getByPaginated(1, model, "id", "asc");
     }
 
     @GetMapping("/saveMobile")
@@ -66,15 +63,22 @@ public class MobileController
     }
 
     @GetMapping("/page/{pageNo}")
-    public String getByPaginated (@PathVariable int pageNo, Model model)
+    public String getByPaginated (@PathVariable int pageNo, Model model,
+            @RequestParam("sortField") String sortField,
+            @RequestParam("sortDirection") String sortDirection)
     {
         int pageSize = 5;
-        Page<Mobile> page = mobileService.getWithPagination(pageNo, pageSize);
+        Page<Mobile> page = mobileService.getWithPagination(pageNo, pageSize, sortField, sortDirection);
         List<Mobile> mobiles = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
+
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDirection", sortDirection.equals("asc") ? "desc" : "asc");
+
         model.addAttribute("mobiles", mobiles);
 
         return "index";
