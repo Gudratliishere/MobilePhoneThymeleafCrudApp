@@ -1,6 +1,7 @@
 package com.gudratli.mobilephone.service;
 
 import com.gudratli.mobilephone.entity.Mobile;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface MobileService
     Mobile save (Mobile mobile);
 
     void delete (Long id);
+
+    Page<Mobile> getWithPagination (int pageNo, int pageSize);
 }

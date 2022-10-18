@@ -6,12 +6,15 @@ import com.gudratli.mobilephone.entity.Mobile;
 import com.gudratli.mobilephone.service.MobileService;
 import com.gudratli.mobilephone.service.ModelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,8 +26,7 @@ public class MobileController
     @GetMapping({"/", "index"})
     public String index (Model model)
     {
-        model.addAttribute("mobiles", mobileService.getAll());
-        return "index";
+        return getByPaginated(1, model);
     }
 
     @GetMapping("/saveMobile")
@@ -61,5 +63,20 @@ public class MobileController
         mobileService.delete(id);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/page/{pageNo}")
+    public String getByPaginated (@PathVariable int pageNo, Model model)
+    {
+        int pageSize = 5;
+        Page<Mobile> page = mobileService.getWithPagination(pageNo, pageSize);
+        List<Mobile> mobiles = page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("mobiles", mobiles);
+
+        return "index";
     }
 }

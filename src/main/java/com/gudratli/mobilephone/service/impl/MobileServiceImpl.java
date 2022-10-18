@@ -4,6 +4,9 @@ import com.gudratli.mobilephone.entity.Mobile;
 import com.gudratli.mobilephone.repository.MobileRepository;
 import com.gudratli.mobilephone.service.MobileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -38,5 +41,12 @@ public class MobileServiceImpl implements MobileService
     public void delete (Long id)
     {
         mobileRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Mobile> getWithPagination (int pageNo, int pageSize)
+    {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return mobileRepository.findAll(pageable);
     }
 }
